@@ -9,16 +9,28 @@ sudo apt install -y python3 python3-dev python3-pip python3-venv \
     redis supervisor cron nodejs npm \
     yarn wkhtmltopdf xvfb build-essential
 
+
+
 # Download and install nvm:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
-# in lieu of restarting the shell
-\. "$HOME/.nvm/nvm.sh"
+# Load NVM into the current shell session
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Download and install Node.js:
+# Verify if NVM is installed correctly
+command -v nvm
+
+# Install Node.js (latest LTS version 18)
 nvm install 18
+nvm use 18
 
-sudo npm install -g yarn
+# Set Node.js 18 as default
+nvm alias default 18
+
+# Install Yarn globally
+npm install -g yarn
+
 
 # Install MariaDB Server
 sudo apt install -y mariadb-server
@@ -75,8 +87,10 @@ cd frappe-bench
 # Create a New Site
 bench new-site site1.local --admin-password admin --db-root-username frappe --db-root-password frappe_password
 
-echo "127.0.0.1 site1.local" | sudo tee -a /etc/hosts
 
+sudo touch /etc/hosts
+
+echo "127.0.0.1 site1.local" | sudo tee -a /etc/hosts
 
 # Bind Site to 0.0.0.0
 sudo sed -i 's/"host_name":.*/"host_name": "0.0.0.0",/g' sites/common_site_config.json
@@ -84,10 +98,10 @@ sudo sed -i 's/"host_name":.*/"host_name": "0.0.0.0",/g' sites/common_site_confi
 # Fix Yarn/CSS build error
 bench build
 
+bench use site1.local
 
 # Start the Bench
 bench start
-
 
 
 # Display Success Message
