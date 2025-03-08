@@ -75,14 +75,20 @@ cd frappe-bench
 # Create a New Site
 bench new-site site1.local --admin-password admin --db-root-username frappe --db-root-password frappe_password
 
+echo "127.0.0.1 site1.local" | sudo tee -a /etc/hosts
+
+
 # Bind Site to 0.0.0.0
 sudo sed -i 's/"host_name":.*/"host_name": "0.0.0.0",/g' sites/common_site_config.json
 
 # Fix Yarn/CSS build error
 bench build
 
+
 # Start the Bench
 bench start
+
+
 
 # Display Success Message
 echo "Frappe has been successfully installed!"
