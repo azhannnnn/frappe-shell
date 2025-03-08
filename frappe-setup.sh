@@ -85,7 +85,7 @@ bench init --frappe-branch version-15 frappe-bench
 cd frappe-bench
 
 # Create a New Site
-bench new-site site1.local --admin-password admin --db-root-username frappe --db-root-password frappe_password
+bench new-site site1.local --admin-password admin --db-root-username frappe --db-root-password frappe_password --db-name site1_local
 
 
 sudo touch /etc/hosts
